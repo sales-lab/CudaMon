@@ -2,32 +2,40 @@
 title: "CudaMon with Rcollectl"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CudaMon with Rcollectl}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{CudaMon with Rcollectl}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    comment = "#>"
 )
 ```
 
-This vignette shows how to combine GPU monitoring from `CudaMon` with CPU and system metrics collected through `Rcollectl`.
+This vignette shows how to combine GPU monitoring from `CudaMon` with CPU and
+system metrics collected through `Rcollectl`.
 
-At the moment the combined plotting helper lives in the package's experimental area, so it must be loaded explicitly.
+At the moment the combined plotting helper lives in the package's experimental
+area, so it must be loaded explicitly.
+
+Install `Rcollectl` from Bioconductor before running the examples:
+
+```{r install-rcollectl, eval = FALSE}
+BiocManager::install("Rcollectl")
+```
 
 ## Load packages and helper code
 
-```{r eval = FALSE}
+```{r load-rcollectl, eval = FALSE}
 source(system.file("future", "viz.R", package = "CudaMon"))
 
 if (!requireNamespace("Rcollectl", quietly = TRUE)) {
-  if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
-  }
-  remotes::install_github("vjcitn/Rcollectl")
+    stop(
+        "Install Rcollectl with BiocManager::install('Rcollectl')",
+        call. = FALSE
+    )
 }
 
 library(CudaMon)
@@ -36,18 +44,20 @@ library(Rcollectl)
 
 ## Start CPU and GPU samplers together
 
-`cl_start()` starts the `collectl`-based sampler, while `cm_start()` starts the NVML sampler for GPU metrics.
+`cl_start()` starts the `collectl`-based sampler, while `cm_start()` starts
+the NVML sampler for GPU metrics.
 
-```{r eval = FALSE}
+```{r start-samplers, eval = FALSE}
 cl_sampler <- cl_start()
 cm_sampler <- cm_start()
 ```
 
 ## Run a workload and record event markers
 
-The example below records three simple workflow steps while both samplers are active.
+The example below records three simple workflow steps while both samplers are
+active.
 
-```{r eval = FALSE}
+```{r record-events, eval = FALSE}
 Sys.sleep(2)
 cm_timestamp(cm_sampler, "step 1")
 Sys.sleep(2)
@@ -59,9 +69,10 @@ Sys.sleep(2)
 
 ## Stop both samplers
 
-Stop the GPU sampler first, then stop the `collectl` sampler and parse both outputs.
+Stop the GPU sampler first, then stop the `collectl` sampler and parse both
+outputs.
 
-```{r eval = FALSE}
+```{r stop-samplers, eval = FALSE}
 cm_stop(cm_sampler)
 cl_stop(cl_sampler)
 
@@ -79,7 +90,7 @@ cl_session <- cl_parse(cl_result_path(cl_sampler))
 
 The example below renders the combined plot in the Rome time zone.
 
-```{r eval = FALSE}
+```{r plot-combined-usage, eval = FALSE}
 p <- plot_usage(cm_session, cl_session, tz = "Europe/Rome")
 p
 ```
@@ -87,14 +98,14 @@ p
 ## Complete example
 
 
-```{r eval = FALSE}
+```{r complete-example, eval = FALSE}
 source(system.file("future", "viz.R", package = "CudaMon"))
 
 if (!requireNamespace("Rcollectl", quietly = TRUE)) {
-  if (!requireNamespace("remotes", quietly = TRUE)) {
-    install.packages("remotes")
-  }
-  remotes::install_github("vjcitn/Rcollectl")
+    stop(
+        "Install Rcollectl with BiocManager::install('Rcollectl')",
+        call. = FALSE
+    )
 }
 
 library(CudaMon)
@@ -118,4 +129,9 @@ cl_session <- cl_parse(cl_result_path(cl_sampler))
 pdf("session.pdf", width = 8, height = 6)
 plot_usage(cm_session, cl_session, tz = "Europe/Rome")
 dev.off()
+```
+
+## Session Info
+```{r session-info, eval = TRUE}
+sessionInfo()
 ```
