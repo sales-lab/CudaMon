@@ -1,23 +1,48 @@
-<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>https://riccardoc95.github.io/CudaMon/404.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/articles/cudamon-rcollectl.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/articles/getting-started.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/articles/index.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/authors.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/index.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/CudaMonSession.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/cm_parser.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/cm_plot_usage.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/cm_start.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/cm_stop.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/cm_timestamp.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/cm_vizdf.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/index.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/nvml_check_status.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/nvml_device_count.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/nvml_get_metrics.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/nvml_is_available.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/nvml_list_compute_processes.html</loc></url>
-<url><loc>https://riccardoc95.github.io/CudaMon/reference/nvml_list_devices.html</loc></url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/404.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/articles/cudamon-rcollectl.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/articles/getting-started.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/authors.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/index.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/CudaMonSession.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/cm_parser.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/cm_plot_usage.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/cm_start.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/cm_stop.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/cm_timestamp.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/cm_vizdf.html</loc>
+  </url>
+  <url>
+    <loc>https://riccardoc95.github.io/CudaMon/reference/index.html</loc>
+  </url>
 </urlset>
-
