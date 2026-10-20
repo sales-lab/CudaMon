@@ -27,15 +27,3 @@ reference:
   - title: Session
     contents:
       - CudaMonSession
-
-  - title: NVML bindings
-    contents:
-      - nvml_is_available
-      - nvml_device_count
-      - nvml_list_devices
-      - nvml_list_compute_processes
-      - nvml_get_metrics
-
-  - title: Internal
-    contents:
-      - nvml_check_status

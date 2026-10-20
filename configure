@@ -66,6 +66,11 @@ if [ "$HAVE_NVML" -eq 0 ]; then
   done
 fi
 
+# ── Avoid linking NVML stubs when libnvidia-ml.so.1 is not available ────────
+if [ "$HAVE_NVML" -eq 1 ] && echo "$NVML_LIB_DIR" | grep -q '/stubs$' && ! ldconfig -p 2>/dev/null | grep -q 'libnvidia-ml[.]so[.]1'; then
+  HAVE_NVML=0
+fi
+
 # ── Conditional output & Makevars generation ────────────────────────────────
 if [ "$HAVE_NVML" -eq 1 ]; then
   echo "configure: NVML support enabled"

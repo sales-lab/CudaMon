@@ -13,9 +13,45 @@ CudaMonSession(
 )
 }
 \arguments{
-\item{device_metrics}{Data frame with GPU device-level samples.}
+\item{device_metrics}{Data frame with GPU device-level samples. Expected
+columns include:
+\describe{
+\item{timestamp}{Sample timestamp in UTC.}
+\item{sampler_pid}{Root process identifier tracked by the sampler.}
+\item{device_index}{Zero-based GPU device index.}
+\item{gpu_utilization_pct}{Percent of the sampling interval during which
+at least one kernel was executing on the GPU. This is an activity
+ratio, not a measure of how saturated the GPU cores were.}
+\item{memory_utilization_pct}{Percent of the sampling interval during
+which global device memory was being read from or written to. This is
+memory-controller activity, not the fraction of GPU memory allocated.}
+\item{temperature_c}{GPU temperature in degrees Celsius.}
+\item{power_usage_mw}{Instantaneous board power draw in milliwatts.}
+\item{memory_used_bytes}{Bytes of device memory currently allocated.}
+\item{memory_total_device_bytes}{Total bytes of physical device memory
+available.}
+}}
 
-\item{compute_processes}{Data frame with GPU process-level samples.}
+\item{compute_processes}{Data frame with GPU process-level samples. Expected
+columns include:
+\describe{
+\item{timestamp}{Sample timestamp in UTC.}
+\item{sampler_pid}{Root process identifier tracked by the sampler.}
+\item{device_index}{Zero-based GPU device index.}
+\item{pid}{Process identifier reported by NVML as using the GPU.}
+\item{tracked_pid}{Tracked process identifier after filtering to the
+requested root process and, optionally, its descendants.}
+\item{is_root_pid}{Whether \code{tracked_pid} is the root process passed
+to the sampler.}
+\item{used_gpu_memory_bytes}{Bytes of GPU memory allocated by the
+process on the sampled device, when reported by NVML.}
+\item{gpu_instance_id}{MIG GPU instance identifier, or \code{NA} when it
+does not apply or is not reported.}
+\item{compute_instance_id}{MIG compute instance identifier, or \code{NA}
+when it does not apply or is not reported.}
+}}
+
+\item{events}{Data frame with event markers recorded during sampling.}
 
 \item{paths}{Named list of output paths.}
 
@@ -26,4 +62,8 @@ An object of class \code{CudaMonSession}.
 }
 \description{
 Construct a CudaMon session object
+}
+\examples{
+session <- CudaMonSession()
+session
 }

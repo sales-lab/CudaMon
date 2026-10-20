@@ -1,6 +1,6 @@
 Package: CudaMon
 Title: Monitor NVIDIA GPU Activity from R with NVML
-Version: 0.0.0.9000
+Version: 0.99.0
 Authors@R:
     c(person(given = "Gabriele",
            family = "Sales",
@@ -14,22 +14,29 @@ Authors@R:
       person(given = "Riccardo",
            family = "Ceccaroni",
            role = "cre",
-           email="riccardo.ceccaroni@unipd.it"))
+           email="riccardo.ceccaroni@unipd.it",
+           comment = c(ORCID = "0000-0001-5786-2830")))
 Description: Monitor NVIDIA GPU activity from R through NVML.
     The package can collect device-level metrics and active compute
     process information over time, annotate runs with event markers,
     and visualize the resulting session data.
 License: Artistic-2.0
+URL: https://github.com/sales-lab/CudaMon
+BugReports: https://github.com/sales-lab/CudaMon/issues
+biocViews: Infrastructure, Visualization, GPU
+SystemRequirements: NVIDIA driver, NVML
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports:
     ggplot2,
+    ps,
     processx
 Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0),
-    reticulate
+    testthat (>= 3.0.0)
+Enhances:
+    Rcollectl
 VignetteBuilder: knitr
 Config/testthat/edition: 3
