@@ -27,11 +27,11 @@ biocViews: Infrastructure, Visualization, GPU
 SystemRequirements: NVIDIA driver, NVML
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Imports:
     ggplot2,
     ps,
-    processx
+    processx,
+    rlang
 Suggests:
     knitr,
     rmarkdown,
@@ -40,3 +40,4 @@ Enhances:
     Rcollectl
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1
