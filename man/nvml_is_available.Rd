@@ -9,7 +9,7 @@ nvml_is_available()
 \value{
 \code{TRUE} if NVML can be initialised and queried, otherwise \code{FALSE}.
 This reports on the driver stack; it does \strong{not} imply that any GPU is
-present. Use \code{nvml_device_count() > 0} to check for visible devices.
+present. Use \code{nvml_device_count() > 0} to check for devices.
 }
 \description{
 Check whether NVML is available
