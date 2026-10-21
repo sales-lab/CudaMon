@@ -19,7 +19,7 @@ on.exit(unlink(witness_path), add = TRUE)
 while (TRUE) {
     sample_time <- format(Sys.time(), tz = "UTC", usetz = TRUE)
     indices <- if (is.null(device_index)) {
-        seq_len(CudaMon:::nvml_device_count()) - 1L
+        seq_len(CudaMon::nvml_device_count()) - 1L
     } else {
         device_index
     }
@@ -28,7 +28,7 @@ while (TRUE) {
         device_rows <- do.call(
             rbind,
             lapply(indices, function(idx) {
-                metrics <- CudaMon:::nvml_get_metrics(idx)
+                metrics <- CudaMon::nvml_get_metrics(idx)
                 data.frame(
                     timestamp = sample_time,
                     sampler_pid = pid,
@@ -60,11 +60,11 @@ while (TRUE) {
         )
     }
 
-    tracked_pids <- CudaMon:::process_pids(
+    tracked_pids <- CudaMon:::lineage_pids(
         pid = pid,
         include_descendants = include_descendants
     )
-    process_rows <- CudaMon:::nvml_list_compute_processes(
+    process_rows <- CudaMon::nvml_list_compute_processes(
         device_index = device_index,
         pid = tracked_pids
     )

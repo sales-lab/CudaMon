@@ -1,52 +1,80 @@
+# Copyright (c) 2025-2026 Gabriele Sales
 # Copyright (c) 2025 Mohammad Amin Zadenoori
-# Copyright (c) 2025 Gabriele Sales
 #
 
 
-#' Convert an NVML error code to an R error
+#' Interpret a raw NVML C return value
 #'
-#' @param code Integer NVML return code (0 == success)
-#' @return Invisible TRUE on success; otherwise stops with an error
+#' @param res A value returned by an `nvml_*_c` routine: either a negative
+#'   integer encoding an NVML error code, or the success payload (a list or a
+#'   non-negative integer).
+#' @return The positive NVML error code as an integer, or `NULL` on success.
 #' @noRd
-nvml_check_status <- function(code) {
-    if (!is.numeric(code) && !is.integer(code)) {
-        stop("NVML status code is not numeric", call. = FALSE)
+fault_code <- function(res) {
+    if (is.integer(res) && length(res) == 1L && res < 0L) {
+        return(-res)
     }
 
-    code <- as.integer(code)
-    nvml_code <- if (code < 0L) abs(code) else code
-
-    if (nvml_code == 0L) {
-        return(invisible(TRUE))
-    }
-
-    msg <- .Call("nvml_error_string_c", nvml_code, PACKAGE = "CudaMon")
-    stop(sprintf("NVML failure: %s (code: %d)", msg, nvml_code), call. = FALSE)
+    NULL
 }
 
 
-#' Number of NVML‑visible devices
+#' Stop with a decoded NVML error if the return value indicates a fault
+#'
+#' @param res A value returned by an `nvml_*_c` routine, as in `fault_code()`.
+#' @return `res`, invisibly, when no fault is detected; otherwise stops with
+#'   an error describing the NVML failure.
 #' @noRd
-nvml_device_count <- function() {
-    cnt <- .Call("nvml_device_count_c", PACKAGE = "CudaMon")
-    if (cnt < 0L) {
-        nvml_check_status(cnt)
+fault_check <- function(res) {
+    code <- fault_code(res)
+    if (!is.null(code)) {
+        msg <- .Call("nvml_error_string_c", code, PACKAGE = "CudaMon")
+        stop(sprintf("NVML failure: %s (code: %d)", msg, code), call. = FALSE)
     }
-    as.integer(cnt)
+
+    invisible(res)
 }
+
 
 #' Check whether NVML is available
 #'
-#' @return `TRUE` if NVML can be initialised and queried, otherwise `FALSE`
-#' @noRd
+#' @return `TRUE` if NVML can be initialised and queried, otherwise `FALSE`.
+#'   This reports on the driver stack; it does **not** imply that any GPU is
+#'   present. Use `nvml_device_count() > 0` to check for devices.
+#' @examples
+#' nvml_is_available()
+#' @export
 nvml_is_available <- function() {
     isTRUE(.Call("nvml_is_available_c", PACKAGE = "CudaMon"))
 }
 
+
+#' Number of NVML-visible devices
+#'
+#' @return An integer count of NVML-visible GPU devices. Stops with an error
+#'   if the NVML query fails.
+#' @examples
+#' if (nvml_is_available()) {
+#'     nvml_device_count()
+#' }
+#' @export
+nvml_device_count <- function() {
+    as.integer(fault_check(.Call("nvml_device_count_c", PACKAGE = "CudaMon")))
+}
+
+
 #' List NVML-visible devices
 #'
-#' @return A data frame with one row per GPU and stable device metadata
-#' @noRd
+#' @return A data frame with one row per GPU and stable device metadata.
+#'   Columns: `device_index` (zero-based index), `name`, `uuid`, and
+#'   `memory_total_device_bytes`. Returns a zero-row data frame with the same
+#'   column types when no devices are visible. Stops with an error if any
+#'   per-device query fails.
+#' @examples
+#' if (nvml_is_available() && nvml_device_count() > 0L) {
+#'     nvml_list_devices()
+#' }
+#' @export
 nvml_list_devices <- function() {
     count <- nvml_device_count()
 
@@ -61,10 +89,9 @@ nvml_list_devices <- function() {
     }
 
     devices <- lapply(seq_len(count) - 1L, function(idx) {
-        res <- .Call("nvml_device_info_c", idx, PACKAGE = "CudaMon")
-        if (is.integer(res) && length(res) == 1L && res < 0L) {
-            nvml_check_status(res)
-        }
+        res <- fault_check(
+            .Call("nvml_device_info_c", idx, PACKAGE = "CudaMon")
+        )
 
         data.frame(
             device_index = as.integer(res[[1L]]),
@@ -81,10 +108,19 @@ nvml_list_devices <- function() {
 
 #' List compute processes active on NVML-visible GPUs
 #'
-#' @param device_index Optional integer GPU index. If `NULL`, query all devices.
+#' @param device_index Optional integer GPU index. If `NULL`, query all
+#'   devices.
 #' @param pid Optional integer vector used to filter the returned processes.
-#' @return A data frame with one row per GPU process observation
-#' @noRd
+#' @return A data frame with one row per GPU process observation. Columns:
+#'   `device_index`, `pid`, `used_gpu_memory_bytes`, `gpu_instance_id`, and
+#'   `compute_instance_id`. The MIG instance ids are `NA` when they do not
+#'   apply or are not reported. Returns a zero-row data frame with the same
+#'   column types when no processes are found.
+#' @examples
+#' if (nvml_is_available() && nvml_device_count() > 0L) {
+#'     nvml_list_compute_processes()
+#' }
+#' @export
 nvml_list_compute_processes <- function(device_index = NULL, pid = NULL) {
     if (is.null(device_index)) {
         indices <- seq_len(nvml_device_count()) - 1L
@@ -107,14 +143,13 @@ nvml_list_compute_processes <- function(device_index = NULL, pid = NULL) {
     }
 
     process_frames <- lapply(indices, function(idx) {
-        res <- .Call(
-            "nvml_device_compute_processes_c",
-            as.integer(idx),
-            PACKAGE = "CudaMon"
+        res <- fault_check(
+            .Call(
+                "nvml_device_compute_processes_c",
+                as.integer(idx),
+                PACKAGE = "CudaMon"
+            )
         )
-        if (is.integer(res) && length(res) == 1L && res < 0L) {
-            nvml_check_status(res)
-        }
 
         data.frame(
             device_index = as.integer(res[[1L]]),
@@ -148,14 +183,15 @@ nvml_list_compute_processes <- function(device_index = NULL, pid = NULL) {
 
 #' Get metrics for a device
 #'
-#' @param device_index Integer, 0‑based GPU index
-#' @return A named list with device-level metrics:
+#' @param device_index Integer, 0-based GPU index
+#' @return A one-row data frame with device-level metrics. Columns:
+#'   `device_index`, then
 #' \describe{
 #'   \item{gpu_utilization_pct}{Percent of the sampling interval during which
-#'     at least one kernel was executing on the GPU. This is an activity ratio,
-#'     not a measure of how saturated the GPU cores were.}
+#'     at least one kernel was executing on the GPU. This is an activity
+#'     ratio, not a measure of how saturated the GPU cores were.}
 #'   \item{memory_utilization_pct}{Percent of the sampling interval during
-#'     which global device memory was being read from or written to. This is
+#'     which global device memory was read from or written to. This is
 #'     memory-controller activity, not the fraction of GPU memory allocated.}
 #'   \item{temperature_c}{GPU temperature in degrees Celsius.}
 #'   \item{power_usage_mw}{Instantaneous board power draw in milliwatts.}
@@ -163,34 +199,30 @@ nvml_list_compute_processes <- function(device_index = NULL, pid = NULL) {
 #'   \item{memory_total_device_bytes}{Total bytes of physical device memory
 #'     available.}
 #' }
-#' @noRd
+#' Metrics that the driver does not support for the device are returned as
+#' `NA` rather than as an error. Stops with an error if the NVML query for
+#' the device fails.
+#' @examples
+#' if (nvml_is_available() && nvml_device_count() > 0L) {
+#'     nvml_get_metrics(0L)
+#' }
+#' @export
 nvml_get_metrics <- function(device_index) {
     if (!is.numeric(device_index) || length(device_index) != 1L) {
         stop("device_index must be a single numeric value", call. = FALSE)
     }
     idx <- as.integer(device_index)
 
-    res <- .Call("nvml_get_metrics_c", idx, PACKAGE = "CudaMon")
-    if (is.integer(res) && length(res) == 1L && res < 0L) {
-        nvml_check_status(res)
-    }
+    res <- fault_check(.Call("nvml_get_metrics_c", idx, PACKAGE = "CudaMon"))
 
-    stats::setNames(
-        list(
-            as.integer(res[[1L]]),
-            as.integer(res[[2L]]),
-            as.integer(res[[3L]]),
-            as.integer(res[[4L]]),
-            as.double(res[[5L]]),
-            as.double(res[[6L]])
-        ),
-        c(
-            "gpu_utilization_pct",
-            "memory_utilization_pct",
-            "temperature_c",
-            "power_usage_mw",
-            "memory_used_bytes",
-            "memory_total_device_bytes"
-        )
+    data.frame(
+        device_index = idx,
+        gpu_utilization_pct = as.integer(res[[1L]]),
+        memory_utilization_pct = as.integer(res[[2L]]),
+        temperature_c = as.integer(res[[3L]]),
+        power_usage_mw = as.integer(res[[4L]]),
+        memory_used_bytes = as.double(res[[5L]]),
+        memory_total_device_bytes = as.double(res[[6L]]),
+        stringsAsFactors = FALSE
     )
 }

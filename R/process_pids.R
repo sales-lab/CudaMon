@@ -4,7 +4,7 @@
 #' @param include_descendants Whether to include child processes recursively.
 #' @return Integer vector of process identifiers.
 #' @noRd
-process_pids <- function(pid, include_descendants = TRUE) {
+lineage_pids <- function(pid, include_descendants = TRUE) {
     pid <- as.integer(pid)
     if (!include_descendants) {
         return(pid)

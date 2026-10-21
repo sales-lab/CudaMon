@@ -35,7 +35,7 @@ A list with sampler metadata and class \code{nvml_sampler}.
 Start sampling NVML metrics to CSV files
 }
 \examples{
-if (CudaMon:::nvml_is_available() && CudaMon:::nvml_device_count() > 0L) {
+if (nvml_is_available() && nvml_device_count() > 0L) {
     sampler <- cm_start(period = 1)
     cm_stop(sampler)
 }

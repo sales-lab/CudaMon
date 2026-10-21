@@ -64,7 +64,7 @@ test_that("nvml_is_available is consistent with nvidia-smi availability", {
 
   smi_devices <- nvidia_smi_query("gpu", c("index"))
 
-  expect_true(CudaMon:::nvml_is_available())
+  expect_true(CudaMon::nvml_is_available())
   expect_gte(nrow(smi_devices), 1L)
 })
 
@@ -74,14 +74,14 @@ test_that("nvml_device_count matches nvidia-smi", {
 
   smi_devices <- nvidia_smi_query("gpu", c("index"))
 
-  expect_equal(CudaMon:::nvml_device_count(), nrow(smi_devices))
+  expect_equal(CudaMon::nvml_device_count(), nrow(smi_devices))
 })
 
 test_that("nvml_list_devices matches nvidia-smi device metadata", {
   skip_if_no_nvidia_gpu()
   skip_if_no_nvidia_smi()
 
-  nvml_devices <- CudaMon:::nvml_list_devices()
+  nvml_devices <- CudaMon::nvml_list_devices()
   smi_devices <- nvidia_smi_query("gpu", c("index", "name", "uuid"))
 
   smi_devices$index <- as.integer(smi_devices$index)
@@ -101,8 +101,8 @@ test_that("nvml_list_compute_processes matches nvidia-smi compute processes", {
   skip_if_no_nvidia_gpu()
   skip_if_no_nvidia_smi()
 
-  nvml_devices <- CudaMon:::nvml_list_devices()
-  nvml_processes <- CudaMon:::nvml_list_compute_processes()
+  nvml_devices <- CudaMon::nvml_list_devices()
+  nvml_processes <- CudaMon::nvml_list_compute_processes()
   smi_processes <- nvidia_smi_query("compute-apps", c("gpu_uuid", "pid", "used_memory"))
 
   if (nrow(smi_processes) == 0L) {

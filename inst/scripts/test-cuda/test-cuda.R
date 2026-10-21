@@ -14,7 +14,7 @@ test_that("CudaMon monitors GPU activity during compiled CUDA matrix multiplicat
   plot_path <- paste0(prefix, "_usage.png")
   stopped <- FALSE
 
-  sampler <- CudaMon:::cm_start(
+  sampler <- CudaMon::cm_start(
     path_prefix = prefix,
     period = 0.2,
     pid = Sys.getpid(),
@@ -23,14 +23,14 @@ test_that("CudaMon monitors GPU activity during compiled CUDA matrix multiplicat
 
   symbol <- getNativeSymbolInfo("cuda_matrix_multiply", dll)
 
-  CudaMon:::cm_timestamp(sampler, "cuda_matmul_start")
+  CudaMon::cm_timestamp(sampler, "cuda_matmul_start")
   result <- .Call(symbol, as.integer(10))
-  CudaMon:::cm_timestamp(sampler, "cuda_matmul_end")
-  CudaMon:::cm_stop(sampler)
+  CudaMon::cm_timestamp(sampler, "cuda_matmul_end")
+  CudaMon::cm_stop(sampler)
   stopped <- TRUE
 
-  session <- CudaMon:::cm_parser(sampler)
-  plot_obj <- CudaMon:::cm_plot_usage(session)
+  session <- CudaMon::cm_parser(sampler)
+  plot_obj <- CudaMon::cm_plot_usage(session)
   ggplot2::ggsave(plot_path, plot_obj, width = 8, height = 5, dpi = 120)
 
   expect_type(result, "double")

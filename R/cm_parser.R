@@ -4,7 +4,7 @@
 #'   character path prefix used to build the sampler output paths.
 #' @return A `CudaMonSession` object.
 #' @examples
-#' if (CudaMon:::nvml_is_available() && CudaMon:::nvml_device_count() > 0L) {
+#' if (nvml_is_available() && nvml_device_count() > 0L) {
 #'     sampler <- cm_start(period = 1)
 #'     Sys.sleep(1)
 #'     cm_stop(sampler)

@@ -4,7 +4,7 @@
 #' @param step A short label identifying the current workflow step.
 #' @return Invisibly returns the sampler.
 #' @examples
-#' if (CudaMon:::nvml_is_available() && CudaMon:::nvml_device_count() > 0L) {
+#' if (nvml_is_available() && nvml_device_count() > 0L) {
 #'     sampler <- cm_start(period = 1)
 #'     cm_timestamp(sampler, "example")
 #'     cm_stop(sampler)

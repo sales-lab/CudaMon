@@ -20,12 +20,12 @@ skip_if_no_nvidia_gpu <- function() {
   )
 
   testthat::skip_if_not(
-    CudaMon:::nvml_is_available(),
+    CudaMon::nvml_is_available(),
     message = "NVML is not available on this machine"
   )
 
   testthat::skip_if_not(
-    CudaMon:::nvml_device_count() > 0L,
+    CudaMon::nvml_device_count() > 0L,
     message = "No NVIDIA GPU detected"
   )
 }
