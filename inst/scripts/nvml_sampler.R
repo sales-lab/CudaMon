@@ -44,8 +44,7 @@ while (TRUE) {
                     memory_used_bytes = as.double(metrics$memory_used_bytes),
                     memory_total_device_bytes = as.double(
                         metrics$memory_total_device_bytes
-                    ),
-                    stringsAsFactors = FALSE
+                    )
                 )
             })
         )

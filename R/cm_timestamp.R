@@ -22,8 +22,7 @@ cm_timestamp <- function(sampler, step) {
     event_row <- data.frame(
         timestamp = format(Sys.time(), tz = "UTC", usetz = TRUE),
         root_pid = as.integer(sampler$root_pid),
-        step = step,
-        stringsAsFactors = FALSE
+        step = step
     )
 
     utils::write.table(

@@ -45,19 +45,19 @@ cm_parser <- function(sampler) {
             isTRUE(file.info(device_metrics_path)$size == 0)) {
             data.frame()
         } else {
-            utils::read.csv(device_metrics_path, stringsAsFactors = FALSE)
+            utils::read.csv(device_metrics_path)
         },
         compute_processes = if (!file.exists(compute_processes_path) ||
             isTRUE(file.info(compute_processes_path)$size == 0)) {
             data.frame()
         } else {
-            utils::read.csv(compute_processes_path, stringsAsFactors = FALSE)
+            utils::read.csv(compute_processes_path)
         },
         events = if (!file.exists(events_path) ||
             isTRUE(file.info(events_path)$size == 0)) {
             data.frame()
         } else {
-            utils::read.csv(events_path, stringsAsFactors = FALSE)
+            utils::read.csv(events_path)
         },
         paths = list(
             device_metrics = device_metrics_path,

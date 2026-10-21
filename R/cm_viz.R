@@ -33,8 +33,7 @@ cm_vizdf <- function(x, tz = "UTC", device_index = NULL) {
       pos = character(),
       value = double(),
       type = character(),
-      device_index = integer(),
-      stringsAsFactors = FALSE
+      device_index = integer()
     ))
   }
 
@@ -49,8 +48,7 @@ cm_vizdf <- function(x, tz = "UTC", device_index = NULL) {
       pos = character(),
       value = double(),
       type = character(),
-      device_index = integer(),
-      stringsAsFactors = FALSE
+      device_index = integer()
     ))
   }
 
@@ -63,8 +61,7 @@ cm_vizdf <- function(x, tz = "UTC", device_index = NULL) {
       pos = "top",
       value = as.double(df$gpu_utilization_pct),
       type = "GPU memory activity (%)",
-      device_index = as.integer(df$device_index),
-      stringsAsFactors = FALSE
+      device_index = as.integer(df$device_index)
     ),
     data.frame(
       tm = tm,
@@ -72,8 +69,7 @@ cm_vizdf <- function(x, tz = "UTC", device_index = NULL) {
       pos = "bot",
       value = as.double(df$memory_used_bytes * 1e-9),
       type = "GPU memory used (Gb)",
-      device_index = as.integer(df$device_index),
-      stringsAsFactors = FALSE
+      device_index = as.integer(df$device_index)
     ),
     data.frame(
       tm = tm,
@@ -81,8 +77,7 @@ cm_vizdf <- function(x, tz = "UTC", device_index = NULL) {
       pos = "top",
       value = as.double(df$temperature_c),
       type = "Temperature (C)",
-      device_index = as.integer(df$device_index),
-      stringsAsFactors = FALSE
+      device_index = as.integer(df$device_index)
     ),
     data.frame(
       tm = tm,
@@ -90,8 +85,7 @@ cm_vizdf <- function(x, tz = "UTC", device_index = NULL) {
       pos = "bot",
       value = as.double(df$power_usage_mw * 1e-3),
       type = "Power (W)",
-      device_index = as.integer(df$device_index),
-      stringsAsFactors = FALSE
+      device_index = as.integer(df$device_index)
     )
   )
   has_value <- stats::ave(

@@ -34,8 +34,7 @@ nvidia_smi_query <- function(query_type, fields) {
       setNames(
         replicate(length(fields), character(0), simplify = FALSE),
         fields
-      ),
-      stringsAsFactors = FALSE
+      )
     )
     return(out)
   }
@@ -43,7 +42,6 @@ nvidia_smi_query <- function(query_type, fields) {
   parsed <- utils::read.csv(
     text = paste(lines, collapse = "\n"),
     header = FALSE,
-    stringsAsFactors = FALSE,
     strip.white = TRUE
   )
 

@@ -26,6 +26,7 @@ BugReports: https://github.com/sales-lab/CudaMon/issues
 biocViews: Infrastructure, Visualization, GPU
 SystemRequirements: NVIDIA driver, NVML
 Encoding: UTF-8
+Depends: R (>= 4.0.0)
 Roxygen: list(markdown = TRUE)
 Imports:
     ggplot2,

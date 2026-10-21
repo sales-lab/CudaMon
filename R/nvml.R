@@ -83,8 +83,7 @@ nvml_list_devices <- function() {
             device_index = integer(),
             name = character(),
             uuid = character(),
-            memory_total_device_bytes = double(),
-            stringsAsFactors = FALSE
+            memory_total_device_bytes = double()
         ))
     }
 
@@ -97,8 +96,7 @@ nvml_list_devices <- function() {
             device_index = as.integer(res[[1L]]),
             name = as.character(res[[2L]]),
             uuid = as.character(res[[3L]]),
-            memory_total_device_bytes = as.double(res[[4L]]),
-            stringsAsFactors = FALSE
+            memory_total_device_bytes = as.double(res[[4L]])
         )
     })
 
@@ -137,8 +135,7 @@ nvml_list_compute_processes <- function(device_index = NULL, pid = NULL) {
             pid = integer(),
             used_gpu_memory_bytes = double(),
             gpu_instance_id = integer(),
-            compute_instance_id = integer(),
-            stringsAsFactors = FALSE
+            compute_instance_id = integer()
         ))
     }
 
@@ -156,8 +153,7 @@ nvml_list_compute_processes <- function(device_index = NULL, pid = NULL) {
             pid = as.integer(res[[2L]]),
             used_gpu_memory_bytes = as.double(res[[3L]]),
             gpu_instance_id = as.integer(res[[4L]]),
-            compute_instance_id = as.integer(res[[5L]]),
-            stringsAsFactors = FALSE
+            compute_instance_id = as.integer(res[[5L]])
         )
     })
 
@@ -222,7 +218,6 @@ nvml_get_metrics <- function(device_index) {
         temperature_c = as.integer(res[[3L]]),
         power_usage_mw = as.integer(res[[4L]]),
         memory_used_bytes = as.double(res[[5L]]),
-        memory_total_device_bytes = as.double(res[[6L]]),
-        stringsAsFactors = FALSE
+        memory_total_device_bytes = as.double(res[[6L]])
     )
 }
